@@ -1,0 +1,196 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1" />
+    <script type="text/javascript" src="js/angular-1.5.3/angular.min.js"></script>
+    <script type="text/javascript" src="Funcion.js">       
+      </script>
+    <script type="text/javascript" src="node_modules/onsenui/js/onsenui.js"></script>
+    <script type="text/javascript" src="node_modules/onsenui/js/angular-onsenui.js"></script>
+    <link rel="stylesheet" href="node_modules/onsenui/css/onsenui.css">
+    <link rel="stylesheet" href="node_modules/onsenui/css/onsen-css-components.css">
+    <style>
+        body{
+            background: #0FB693;
+        }
+        #img{
+            position:sticky;  left:320em;
+        }
+        #fecha{
+        position:sticky;    left:320em;
+           
+        }
+        #txtjason{
+                width: 100%;
+    padding: 12px 20px;
+    display: inline-block;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+        }
+       .form-element {
+  display: table-cell;
+  box-sizing: border-box;
+}
+        #imagenurl{
+            width: 50%;
+             height: 100%;
+            max-width: 100%;
+        background-size: cover;
+        }
+
+.textfield {
+  width:100%
+}
+
+.textfield > input {
+  width:100%
+}
+
+
+/*********************************
+This is just some styling.
+*********************************/
+form {
+  background: #126655;
+  padding:12px;
+}
+
+input {
+  padding:10px;
+}
+        #scroll{
+            background-color: #138B73;
+   width: 100%;
+            height: 100%;
+    overflow: scroll;
+        }
+        
+        
+        #resultado{
+            background-color: #138B73;
+        }
+        #h33{
+            background-color: #138B73; 
+            color:white;
+        }
+        #titulo2{
+            color: white;
+        }
+      </style>
+    <script type="text/javascript">
+   ons.bootstrap()
+  .controller('MiControlador', function($scope) {
+    this.showDialog = function() {
+      if (this.dialog) {
+        this.dialog.show();
+      } else {
+        ons.createDialog('dialog.html', { parentScope: $scope })
+          .then(function(dialog) {
+            this.dialog = dialog;
+            dialog.show();
+          }.bind(this));
+      }
+    }.bind(this);
+  });
+        var showDialog = function (id) {
+  document
+    .getElementById(id)
+    .show();
+};
+
+var hideDialog = function (id) {
+  document
+    .getElementById(id)
+    .hide();
+   var txtautor = document.getElementById("lista_x_autor");
+    txtautor.innerHTML='';
+    navigator.vibrate(3000);
+};
+      </script>
+       </head>
+  <body ng-app="myApp">
+    <ons-page >
+  <ons-toolbar>
+    <div class="center"><b>Lista de experiencias</b></div>
+    <div class="right">
+      <ons-toolbar-button>
+        <ons-icon size="30px" spin icon="md-spinner" onclick="showDialog('dialog-1')"></ons-icon>
+        
+      </ons-toolbar-button>
+        <a href="ejemplo.html"><ons-toolbar-button style="color: #891212">  <ons-icon icon="apple" size="30px" ></ons-icon></ons-toolbar-button></a>
+        
+    </div>
+  </ons-toolbar>
+  
+<ons-list>
+      
+      <div class="center" id="resultado">
+      
+       </div>
+          
+        </ons-list>
+       
+        <input type="text" id="txtjason" style="background-color: #06C8A1;" placeholder="Buscar en la json" ng-model="busqueda">
+    <ons-list-header id="h33">Datos Json   </ons-list-header>
+       <div id="scroll" ng-controller="MiControlador">
+       
+        <ons-list modifier="inset" ng-repeat="x in datos | filter: busqueda">
+            <ons-list-header>{{x.data[0].title}}<l id="fecha">ID:&nbsp;{{x.data[0].nasa_id}}</l></ons-list-header>
+            <ons-list-item modifier="longdivider"><center><img id="imagenurl"  src="{{x.links[0].href}}"></center></ons-list-item>
+    <ons-list-item modifier="longdivider">Creador:&nbsp; {{x.data[0].secondary_creator}}</ons-list-item>
+    <ons-list-item modifier="longdivider">Descripcion:&nbsp;{{x.data[0].description}} </ons-list-item>
+    <ons-list-item modifier="longdivider" id="Fecha"> <l id="fecha">{{x.data[0].date_created}}</l></ons-list-item>
+  </ons-list></div>
+   <!--Ventanas emergentes------------------->     
+<ons-dialog var="dialog">
+ <ons-button data-ng-click="dialog.hide()" style=" position:sticky;  left:120em;"><img src="img/Eliminar.png"> </ons-button>
+  <div style=" padding: 70px;">
+    
+      <input type="hidden" id="idregistro">
+      <b><input type="text" placeholder="Titulo" id="titulo"><br><br>
+      <input type="text" placeholder="Descripcion" id="descripcion"><br><br>
+      <input type="date" id="hora"></b>
+   
+<br><br>
+    
+      <ons-button onClick="InsertarRegistro()" title="Guardar"><img src="img/Guardar.png" id="agregar"> </ons-button>
+      
+      <ons-button modifier="cta" onclick="ActualizarR()" title="Actualizar"><img src="img/Actualiza.png"> </ons-button>
+    
+  </div>
+</ons-dialog>
+    
+    <ons-dialog id="dialog-1">
+  <div style="text-align: center; padding: 10px;">
+    <center><form>
+    <div class="form-element textfield">
+      <input type="text" id="txtautor_b" placeholder="Buscar localmente">
+    </div>
+  
+  <div class="form-element submit-btn">
+    <input type="button" value="Buscar" onclick="buscxAutor()">
+  </div>
+  
+</form> </center>
+      <div id="lista_x_autor"></div>
+        <p>
+          <ons-button onclick="hideDialog('dialog-1')">Cerrar</ons-button>
+        </p>
+  </div>
+</ons-dialog>
+<!-- botton plus color verde------------------->
+    <ons-fab position="bottom right" ng-click="dialog.show()">
+    <ons-icon icon="md-plus"></ons-icon>
+  </ons-fab>
+</ons-page>
+     
+      <script type="text/javascript" src="BD.js"></script>
+      <script type="text/javascript" src="cordova.js"></script>
+    <script type="text/javascript" src="js/index.js"></script>
+    <script type="text/javascript">
+        app.initialize();
+    </script>
+  </body>
+</html>
